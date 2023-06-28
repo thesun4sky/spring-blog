@@ -36,53 +36,32 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = jwtUtil.resolveToken(request);
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
-        if(token != null) {
-            if(!jwtUtil.validateToken(token)){
+        String tokenValue = jwtUtil.getTokenFromRequest(req);
+
+        if (StringUtils.hasText(tokenValue)) {
+            // JWT 토큰 substring
+            tokenValue = jwtUtil.substringToken(tokenValue);
+            log.info(tokenValue);
+
+            if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
                 return;
             }
-            Claims info = jwtUtil.getUserInfoFromToken(token);
-            setAuthentication(info.getSubject());
+
+            Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
+
+            try {
+                setAuthentication(info.getSubject());
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                return;
+            }
         }
-        try {
-            filterChain.doFilter(request, response);
-        }catch(FileUploadException e){
-            log.error(e.getMessage());
-        }
+
+        filterChain.doFilter(req, res);
     }
-
-
-    // TODO 쿠키에서 토큰 가져오기
-    //@Override
-    //protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
-    //
-    //    String tokenValue = jwtUtil.getTokenFromRequest(req);
-    //
-    //    if (StringUtils.hasText(tokenValue)) {
-    //        // JWT 토큰 substring
-    //        tokenValue = jwtUtil.substringToken(tokenValue);
-    //        log.info(tokenValue);
-    //
-    //        if (!jwtUtil.validateToken(tokenValue)) {
-    //            log.error("Token Error");
-    //            return;
-    //        }
-    //
-    //        Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
-    //
-    //        try {
-    //            setAuthentication(info.getSubject());
-    //        } catch (Exception e) {
-    //            log.error(e.getMessage());
-    //            return;
-    //        }
-    //    }
-    //
-    //    filterChain.doFilter(req, res);
-    //}
 
     // 인증 처리
     public void setAuthentication(String username) {

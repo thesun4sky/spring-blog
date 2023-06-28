@@ -46,13 +46,13 @@ public class WebSecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-    // TODO Cookie 에서 로그인정보 추가
-    //@Bean
-    //public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-    //    JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
-    //    filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
-    //    return filter;
-    //}
+    // Cookie 에서 로그인정보 추가
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+        filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
+        return filter;
+    }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
@@ -77,10 +77,8 @@ public class WebSecurityConfig {
         );
 
         // 필터 관리
-        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-        // TODO 토큰을 쿠키에 넣으려면 아래와 같이 jwtAuthenticationFilter를 추가해서 로그인 성공시 넣어준다.
-        // http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
-        // http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
+         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

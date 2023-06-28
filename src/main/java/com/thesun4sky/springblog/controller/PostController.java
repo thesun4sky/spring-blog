@@ -30,10 +30,9 @@ public class PostController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/posts")
-    // TODO 쿠키 가져와서 한번더 체크하는 방법
-    //public ResponseEntity<PostResponseDto> createPost(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String data, @RequestBody PostRequestDto requestDto) {
-    //    jwtUtil.doubleCheckToken(data);
+    // 쿠키 가져와서 한번더 체크하는 방법
     public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto) {
+
         PostResponseDto result = postService.createPost(requestDto);
 
         return ResponseEntity.status(201).body(result);

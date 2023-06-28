@@ -35,12 +35,9 @@ public class UserController {
     public ResponseEntity<ApiResponseDto> login(@RequestBody AuthRequestDto loginRequestDto, HttpServletResponse response) {
         userService.login(loginRequestDto);
 
-        //JWT 생성 및 쿠키에 저장 후 Response 객체에 추가
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(loginRequestDto.getUsername()));
-
-        // TODO Cookie 에 넣기
-        // String token = jwtUtil.createToken(loginRequestDto.getUsername());
-        // jwtUtil.addJwtToCookie(token, response);
+        // Cookie 에 넣기
+         String token = jwtUtil.createToken(loginRequestDto.getUsername());
+         jwtUtil.addJwtToCookie(token, response);
 
         return ResponseEntity.status(200).body(new ApiResponseDto("로그인 성공", HttpStatus.CREATED.value()));
     }

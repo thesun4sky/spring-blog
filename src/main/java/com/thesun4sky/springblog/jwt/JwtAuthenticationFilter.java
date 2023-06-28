@@ -46,11 +46,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
 		log.info("로그인 성공 및 JWT 생성");
-		// TODO 쿠키에 토큰 넣기
-		//String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
-		//
-		//String token = jwtUtil.createToken(username);
-		//jwtUtil.addJwtToCookie(token, response);
+		// 쿠키에 토큰 넣기
+		String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
+
+		String token = jwtUtil.createToken(username);
+		jwtUtil.addJwtToCookie(token, response);
 	}
 
 	@Override

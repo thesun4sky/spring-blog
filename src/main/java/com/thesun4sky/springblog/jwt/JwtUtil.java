@@ -1,6 +1,5 @@
 package com.thesun4sky.springblog.jwt;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -11,10 +10,6 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -117,25 +112,19 @@ public class JwtUtil {
         }
         return false;
     }
-    public void doubleCheckToken(String data) {
-        data = substringToken(data);
-        if (!validateToken(data)) {
-            throw new RuntimeException("Invalid token");
-        }
-    }
 
-    // TODO HttpServletRequest 에서 Cookie Value : JWT 가져오기
-    //public String getTokenFromRequest(HttpServletRequest req) {
-    //    Cookie[] cookies = req.getCookies();
-    //    if(cookies != null) {
-    //        for (Cookie cookie : cookies) {
-    //            if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
-    //                return URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8); // Encode 되어 넘어간 Value 다시 Decode
-    //            }
-    //        }
-    //    }
-    //    return null;
-    //}
+    // HttpServletRequest 에서 Cookie Value : JWT 가져오기
+    public String getTokenFromRequest(HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
+                    return URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8); // Encode 되어 넘어간 Value 다시 Decode
+                }
+            }
+        }
+        return null;
+    }
 
     // 토큰에서 사용자 정보 가져오기
     public Claims getUserInfoFromToken(String token) {
