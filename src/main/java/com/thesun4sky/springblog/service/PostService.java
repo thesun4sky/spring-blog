@@ -1,6 +1,7 @@
 package com.thesun4sky.springblog.service;
 
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -42,15 +43,23 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    public void deletePost(Long id) {
+    public void deletePost(Long id, User user) {
         Post post = findPost(id);
+
+        if (!post.getUser().equals(user)) {
+            throw new RejectedExecutionException();
+        }
 
         postRepository.delete(post);
     }
 
     @Transactional
-    public PostResponseDto updatePost(Long id, PostRequestDto requestDto) {
+    public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user) {
         Post post = findPost(id);
+
+        if (!post.getUser().equals(user)) {
+            throw new RejectedExecutionException();
+        }
 
         post.setTitle(requestDto.getTitle());
         post.setContent(requestDto.getContent());

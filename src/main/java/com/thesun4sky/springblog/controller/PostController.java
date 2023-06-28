@@ -1,5 +1,7 @@
 package com.thesun4sky.springblog.controller;
 
+import java.util.concurrent.RejectedExecutionException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -49,16 +51,22 @@ public class PostController {
     }
 
     @PutMapping("/posts/{id}")
-    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
-        PostResponseDto result = postService.updatePost(id, requestDto);
-
-        return ResponseEntity.ok().body(result);
+    public ResponseEntity<PostResponseDto> updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id, @RequestBody PostRequestDto requestDto) {
+        try {
+            PostResponseDto result = postService.updatePost(id, requestDto, userDetails.getUser());
+            return ResponseEntity.ok().body(result);
+        } catch (RejectedExecutionException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("/posts/{id}")
-    public ResponseEntity<ApiResponseDto> deletePost(@PathVariable Long id) {
-        postService.deletePost(id);
-
+    public ResponseEntity<ApiResponseDto> deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+    try {
+        postService.deletePost(id, userDetails.getUser());
         return ResponseEntity.ok().body(new ApiResponseDto("게시글 삭제 성공", HttpStatus.OK.value()));
+    } catch (RejectedExecutionException e) {
+        return ResponseEntity.badRequest().build();
+    }
     }
 }
