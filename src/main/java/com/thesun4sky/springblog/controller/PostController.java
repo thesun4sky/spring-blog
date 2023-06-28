@@ -1,5 +1,6 @@
 package com.thesun4sky.springblog.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,8 +30,10 @@ public class PostController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/posts")
-    public ResponseEntity<PostResponseDto> createPost(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String data, @RequestBody PostRequestDto requestDto) {
-        jwtUtil.doubleCheckToken(data);
+    // TODO 쿠키 가져와서 한번더 체크하는 방법
+    //public ResponseEntity<PostResponseDto> createPost(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String data, @RequestBody PostRequestDto requestDto) {
+    //    jwtUtil.doubleCheckToken(data);
+    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto) {
         PostResponseDto result = postService.createPost(requestDto);
 
         return ResponseEntity.status(201).body(result);
@@ -40,29 +43,27 @@ public class PostController {
     public ResponseEntity<PostListResponseDto> getPosts() {
         PostListResponseDto result = postService.getPosts();
 
-        return ResponseEntity.status(200).body(result);
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/posts/{id}")
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long id) {
         PostResponseDto result = postService.getPostById(id);
 
-        return ResponseEntity.status(200).body(result);
+        return ResponseEntity.ok().body(result);
     }
 
     @PutMapping("/posts/{id}")
-    public ResponseEntity<PostResponseDto> updatePost(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String data, @PathVariable Long id, @RequestBody PostRequestDto requestDto) {
-        jwtUtil.doubleCheckToken(data);
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
         PostResponseDto result = postService.updatePost(id, requestDto);
 
-        return ResponseEntity.status(200).body(result);
+        return ResponseEntity.ok().body(result);
     }
 
     @DeleteMapping("/posts/{id}")
-    public ResponseEntity<ApiResponseDto> deletePost(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String data, @PathVariable Long id) {
-        jwtUtil.doubleCheckToken(data);
+    public ResponseEntity<ApiResponseDto> deletePost(@PathVariable Long id) {
         postService.deletePost(id);
 
-        return ResponseEntity.status(200).body(new ApiResponseDto("게시글 삭제 성공", 200));
+        return ResponseEntity.ok().body(new ApiResponseDto("게시글 삭제 성공", HttpStatus.OK.value()));
     }
 }
