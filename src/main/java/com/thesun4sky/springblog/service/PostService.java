@@ -12,6 +12,7 @@ import com.thesun4sky.springblog.dto.PostRequestDto;
 import com.thesun4sky.springblog.dto.PostResponseDto;
 import com.thesun4sky.springblog.entity.Post;
 import com.thesun4sky.springblog.entity.User;
+import com.thesun4sky.springblog.entity.UserRoleEnum;
 import com.thesun4sky.springblog.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -46,7 +47,8 @@ public class PostService {
     public void deletePost(Long id, User user) {
         Post post = findPost(id);
 
-        if (!post.getUser().equals(user)) {
+        // 게시글 작성자(post.user) 와 요청자(user) 가 같은지 체크
+        if (!user.getRole().equals(UserRoleEnum.ADMIN) && !post.getUser().equals(user)) {
             throw new RejectedExecutionException();
         }
 
@@ -57,7 +59,8 @@ public class PostService {
     public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user) {
         Post post = findPost(id);
 
-        if (!post.getUser().equals(user)) {
+        // 게시글 작성자(post.user) 와 요청자(user) 가 같은지 체크
+        if (!user.getRole().equals(UserRoleEnum.ADMIN) && !post.getUser().equals(user)) {
             throw new RejectedExecutionException();
         }
 
