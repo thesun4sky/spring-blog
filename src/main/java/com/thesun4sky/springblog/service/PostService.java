@@ -70,7 +70,7 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    private Post findPost(long id) {
+    public Post findPost(long id) {
         return postRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.")
         );
