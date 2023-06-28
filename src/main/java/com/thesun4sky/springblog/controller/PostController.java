@@ -2,7 +2,7 @@ package com.thesun4sky.springblog.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +16,7 @@ import com.thesun4sky.springblog.dto.ApiResponseDto;
 import com.thesun4sky.springblog.dto.PostListResponseDto;
 import com.thesun4sky.springblog.dto.PostRequestDto;
 import com.thesun4sky.springblog.dto.PostResponseDto;
-import com.thesun4sky.springblog.jwt.JwtUtil;
+import com.thesun4sky.springblog.security.UserDetailsImpl;
 import com.thesun4sky.springblog.service.PostService;
 import lombok.RequiredArgsConstructor;
 
@@ -28,8 +28,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto) {
-        PostResponseDto result = postService.createPost(requestDto);
+    public ResponseEntity<PostResponseDto> createPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PostRequestDto requestDto) {
+        PostResponseDto result = postService.createPost(requestDto, userDetails.getUser());
 
         return ResponseEntity.status(201).body(result);
     }

@@ -49,7 +49,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
         try {
             filterChain.doFilter(request, response);
-        }catch(FileUploadException e){
+        } catch(FileUploadException e){
             log.error(e.getMessage());
         }
     }

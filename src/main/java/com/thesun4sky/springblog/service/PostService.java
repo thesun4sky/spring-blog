@@ -10,6 +10,7 @@ import com.thesun4sky.springblog.dto.PostListResponseDto;
 import com.thesun4sky.springblog.dto.PostRequestDto;
 import com.thesun4sky.springblog.dto.PostResponseDto;
 import com.thesun4sky.springblog.entity.Post;
+import com.thesun4sky.springblog.entity.User;
 import com.thesun4sky.springblog.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -18,8 +19,9 @@ import lombok.RequiredArgsConstructor;
 public class PostService {
     private final PostRepository postRepository;
 
-    public PostResponseDto createPost(PostRequestDto requestDto) {
+    public PostResponseDto createPost(PostRequestDto requestDto, User user) {
         Post post = new Post(requestDto);
+        post.setUser(user);
 
         postRepository.save(post);
 
