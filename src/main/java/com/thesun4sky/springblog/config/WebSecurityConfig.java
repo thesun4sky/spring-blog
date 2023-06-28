@@ -13,10 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.thesun4sky.springblog.jwt.JwtAuthenticationFilter;
 import com.thesun4sky.springblog.jwt.JwtAuthorizationFilter;
 import com.thesun4sky.springblog.jwt.JwtUtil;
 import com.thesun4sky.springblog.security.UserDetailsServiceImpl;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 1. 인증설정
@@ -24,17 +24,11 @@ import com.thesun4sky.springblog.security.UserDetailsServiceImpl;
  */
 @Configuration
 @EnableWebSecurity // Spring Security 지원을 가능하게 함
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
-    private final AuthenticationConfiguration authenticationConfiguration;
-
-    public WebSecurityConfig(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, AuthenticationConfiguration authenticationConfiguration) {
-        this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
-        this.authenticationConfiguration = authenticationConfiguration;
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,14 +39,6 @@ public class WebSecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
-    // TODO Cookie 에서 로그인정보 추가
-    //@Bean
-    //public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-    //    JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
-    //    filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
-    //    return filter;
-    //}
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
@@ -78,9 +64,6 @@ public class WebSecurityConfig {
 
         // 필터 관리
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-        // TODO 토큰을 쿠키에 넣으려면 아래와 같이 jwtAuthenticationFilter를 추가해서 로그인 성공시 넣어준다.
-        // http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
-        // http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
