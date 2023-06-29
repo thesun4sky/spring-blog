@@ -31,7 +31,7 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> createComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CommentRequestDto requestDto) {
         CommentResponseDto result = commentService.createComment(requestDto, userDetails.getUser());
 
-        return ResponseEntity.status(201).body(result);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PutMapping("/comments/{id}")
@@ -40,7 +40,7 @@ public class CommentController {
             CommentResponseDto result = commentService.updateComment(id, requestDto, userDetails.getUser());
             return ResponseEntity.ok().body(result);
         } catch (RejectedExecutionException e) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 삭제/수정 할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
+            return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 수정 할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
         }
     }
 
@@ -50,7 +50,7 @@ public class CommentController {
             commentService.deleteComment(id, userDetails.getUser());
             return ResponseEntity.ok().body(new ApiResponseDto("댓글 삭제 성공", HttpStatus.OK.value()));
         } catch (RejectedExecutionException e) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 삭제/수정 할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
+            return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 삭제 할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
         }
     }
 }

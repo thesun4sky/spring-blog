@@ -26,9 +26,9 @@ public class CommentService {
         comment.setUser(user);
         comment.setPost(post);
 
-        commentRepository.save(comment);
+        var savedComment = commentRepository.save(comment);
 
-        return new CommentResponseDto(comment);
+        return new CommentResponseDto(savedComment);
     }
 
     public void deleteComment(Long id, User user) {
