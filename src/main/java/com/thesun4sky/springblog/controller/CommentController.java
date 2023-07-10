@@ -17,6 +17,7 @@ import com.sun.jdi.request.DuplicateRequestException;
 import com.thesun4sky.springblog.dto.ApiResponseDto;
 import com.thesun4sky.springblog.dto.CommentRequestDto;
 import com.thesun4sky.springblog.dto.CommentResponseDto;
+import com.thesun4sky.springblog.entity.Comment;
 import com.thesun4sky.springblog.security.UserDetailsImpl;
 import com.thesun4sky.springblog.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,8 @@ public class CommentController {
     @PutMapping("/comments/{id}")
     public ResponseEntity<ApiResponseDto> updateComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id, @RequestBody CommentRequestDto requestDto) {
         try {
-            CommentResponseDto result = commentService.updateComment(id, requestDto, userDetails.getUser());
+            Comment comment = commentService.findComment(id);
+            CommentResponseDto result = commentService.updateComment(comment, requestDto, userDetails.getUser());
             return ResponseEntity.ok().body(result);
         } catch (RejectedExecutionException e) {
             return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 수정 할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
@@ -48,7 +50,8 @@ public class CommentController {
     @DeleteMapping("/comments/{id}")
     public ResponseEntity<ApiResponseDto> deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         try {
-            commentService.deleteComment(id, userDetails.getUser());
+            Comment comment = commentService.findComment(id);
+            commentService.deleteComment(comment, userDetails.getUser());
             return ResponseEntity.ok().body(new ApiResponseDto("댓글 삭제 성공", HttpStatus.OK.value()));
         } catch (RejectedExecutionException e) {
             return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 삭제 할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));

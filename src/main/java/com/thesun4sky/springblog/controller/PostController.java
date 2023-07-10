@@ -19,6 +19,7 @@ import com.thesun4sky.springblog.dto.ApiResponseDto;
 import com.thesun4sky.springblog.dto.PostListResponseDto;
 import com.thesun4sky.springblog.dto.PostRequestDto;
 import com.thesun4sky.springblog.dto.PostResponseDto;
+import com.thesun4sky.springblog.entity.Post;
 import com.thesun4sky.springblog.security.UserDetailsImpl;
 import com.thesun4sky.springblog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +57,8 @@ public class PostController {
         PostResponseDto result;
 
         try {
-            result = postService.updatePost(id, requestDto, userDetails.getUser());
+            Post post = postService.findPost(id);
+            result = postService.updatePost(post, requestDto, userDetails.getUser());
         } catch (RejectedExecutionException e) {
             return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 수정 할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
         }

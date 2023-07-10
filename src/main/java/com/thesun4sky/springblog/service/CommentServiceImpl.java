@@ -38,26 +38,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(Long id, User user) {
-        Comment comment = commentRepository.findById(id).orElseThrow();
-
-        // 요청자가 운영자 이거나 댓글 작성자(post.user) 와 요청자(user) 가 같은지 체크
-        if (!user.getRole().equals(UserRoleEnum.ADMIN) && !comment.getUser().equals(user)) {
-            throw new RejectedExecutionException();
-        }
-
+    public void deleteComment(Comment comment, User user) {
         commentRepository.delete(comment);
     }
 
     @Override
     @Transactional
-    public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user) {
-        Comment comment = commentRepository.findById(id).orElseThrow();
-
-        // 요청자가 운영자 이거나 댓글 작성자(post.user) 와 요청자(user) 가 같은지 체크
-        if (!user.getRole().equals(UserRoleEnum.ADMIN) && !comment.getUser().equals(user)) {
-            throw new RejectedExecutionException();
-        }
+    public CommentResponseDto updateComment(Comment comment, CommentRequestDto requestDto, User user) {
 
         comment.setBody(requestDto.getBody());
 

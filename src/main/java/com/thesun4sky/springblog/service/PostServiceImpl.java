@@ -88,13 +88,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user) {
-        Post post = findPost(id);
-
-        // 게시글 작성자(post.user) 와 요청자(user) 가 같은지 또는 Admin 인지 체크 (아니면 예외발생)
-        if (!(user.getRole().equals(UserRoleEnum.ADMIN) || post.getUser().equals(user))) {
-            throw new RejectedExecutionException();
-        }
+    public PostResponseDto updatePost(Post post, PostRequestDto requestDto, User user) {
 
         post.setTitle(requestDto.getTitle());
         post.setContent(requestDto.getContent());

@@ -8,9 +8,9 @@ import com.thesun4sky.springblog.entity.User;
 public interface CommentService {
 	CommentResponseDto createComment(CommentRequestDto requestDto, User user);
 
-	CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user);
+	CommentResponseDto updateComment(Comment comment, CommentRequestDto requestDto, User user);
 
-	void deleteComment(Long id, User user);
+	void deleteComment(Comment comment, User user);
 
 	void likeComment(Long id, User user);
 

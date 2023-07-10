@@ -1,5 +1,6 @@
 package com.thesun4sky.springblog.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.thesun4sky.springblog.dto.PostRequestDto;
@@ -38,10 +39,10 @@ public class Post extends TimeStamped {
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<PostLike> postLikes;
+    private List<PostLike> postLikes = new ArrayList<>();
 
     public Post(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();

@@ -1,5 +1,6 @@
 package com.thesun4sky.springblog.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -37,7 +38,7 @@ public class Comment extends TimeStamped {
     private User user;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
-    private List<CommentLike> commentLikes;
+    private List<CommentLike> commentLikes = new ArrayList<>();
 
     public Comment(String body) {
         this.body = body;

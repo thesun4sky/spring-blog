@@ -30,12 +30,12 @@ public interface PostService {
 
 	/**
 	 * 게시글 업데이트
-	 * @param id 업데이트 할 게시글 ID
+	 * @param post 업데이트 할 게시글
 	 * @param requestDto 업데이트 할 게시글 정보
 	 * @param user 게시글 업데이트 요청자
 	 * @return 업데이트된 게시글 정보
 	 */
-	PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user);
+	PostResponseDto updatePost(Post post, PostRequestDto requestDto, User user);
 
 	/**
 	 * 게시글 삭제
