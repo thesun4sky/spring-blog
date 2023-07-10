@@ -1,6 +1,7 @@
 package com.thesun4sky.springblog.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 
@@ -68,6 +69,17 @@ public class PostServiceImpl implements PostService {
         } else {
             PostLike postLike = new PostLike(user, post);
             postLikeRepository.save(postLike);
+        }
+    }
+
+    @Override
+    public void dislikePost(Long id, User user) {
+        Post post = findPost(id);
+        Optional<PostLike> postLikeOptional = postLikeRepository.findByUserAndPost(user, post);
+        if (postLikeOptional.isPresent()) {
+            postLikeRepository.delete(postLikeOptional.get());
+        } else {
+            throw new IllegalArgumentException("해당 게시글에 취소할 좋아요가 없습니다.");
         }
     }
 

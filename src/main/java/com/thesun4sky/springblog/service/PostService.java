@@ -49,4 +49,11 @@ public interface PostService {
 	 * @param user 게시글 좋아요 요청자
 	 */
 	void likePost(Long id, User user);
+
+	/**
+	 * 게시글 좋아요 취소
+	 * @param id 좋아요 취소 요청 게시글 ID
+	 * @param user 게시글 좋아요 취소 요청자
+	 */
+	void dislikePost(Long id, User user);
 }
