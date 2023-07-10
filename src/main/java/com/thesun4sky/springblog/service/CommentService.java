@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
-    private final PostService postService;
+    private final PostServiceImpl postService;
     private final CommentRepository commentRepository;
 
     public CommentResponseDto createComment(CommentRequestDto requestDto, User user) {
