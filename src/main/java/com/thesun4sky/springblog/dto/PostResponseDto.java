@@ -14,6 +14,7 @@ public class PostResponseDto extends ApiResponseDto{
     private Long id;
     private String title;
     private String content;
+    private Integer likeCount;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private String username;
@@ -23,6 +24,7 @@ public class PostResponseDto extends ApiResponseDto{
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
+        this.likeCount = post.getPostLikes().size();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
         this.username = post.getUser().getUsername();
