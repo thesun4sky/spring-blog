@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
+    @Override
 
     public PostResponseDto createPost(PostRequestDto requestDto, User user) {
         Post post = new Post(requestDto);
@@ -34,7 +35,7 @@ public class PostServiceImpl implements PostService {
 
         return new PostResponseDto(post);
     }
-
+    @Override
     public PostListResponseDto getPosts() {
         List<PostResponseDto> postList = postRepository.findAll().stream()
                 .map(PostResponseDto::new)
@@ -42,13 +43,13 @@ public class PostServiceImpl implements PostService {
 
         return new PostListResponseDto(postList);
     }
-
+    @Override
     public PostResponseDto getPostById(Long id) {
         Post post = findPost(id);
 
         return new PostResponseDto(post);
     }
-
+    @Override
     public void deletePost(Long id, User user) {
         Post post = findPost(id);
 
@@ -61,6 +62,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public void likePost(Long id, User user) {
         Post post = findPost(id);
 
@@ -73,6 +75,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public void dislikePost(Long id, User user) {
         Post post = findPost(id);
         Optional<PostLike> postLikeOptional = postLikeRepository.findByUserAndPost(user, post);
@@ -83,6 +86,7 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    @Override
     @Transactional
     public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user) {
         Post post = findPost(id);
@@ -98,6 +102,7 @@ public class PostServiceImpl implements PostService {
         return new PostResponseDto(post);
     }
 
+    @Override
     public Post findPost(long id) {
         return postRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.")

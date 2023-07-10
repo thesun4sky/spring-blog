@@ -3,6 +3,7 @@ package com.thesun4sky.springblog.service;
 import com.thesun4sky.springblog.dto.PostListResponseDto;
 import com.thesun4sky.springblog.dto.PostRequestDto;
 import com.thesun4sky.springblog.dto.PostResponseDto;
+import com.thesun4sky.springblog.entity.Post;
 import com.thesun4sky.springblog.entity.User;
 
 public interface PostService {
@@ -56,4 +57,11 @@ public interface PostService {
 	 * @param user 게시글 좋아요 취소 요청자
 	 */
 	void dislikePost(Long id, User user);
+
+	/**
+	 * 게시글 Entity 단건 조회
+	 * @param id 조회할 게시글 ID
+	 * @return 게시글 Entity
+	 */
+	Post findPost(long id);
 }
