@@ -70,9 +70,9 @@ public class CommentController {
     }
 
     @DeleteMapping("/comments/{id}/like")
-    public ResponseEntity<ApiResponseDto> dislikeComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+    public ResponseEntity<ApiResponseDto> deleteLkeComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         try {
-            commentService.dislikeComment(id, userDetails.getUser());
+            commentService.deleteLikeComment(id, userDetails.getUser());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }

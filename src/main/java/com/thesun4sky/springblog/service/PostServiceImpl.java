@@ -26,7 +26,6 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
     @Override
-
     public PostResponseDto createPost(PostRequestDto requestDto, User user) {
         Post post = new Post(requestDto);
         post.setUser(user);
@@ -50,14 +49,7 @@ public class PostServiceImpl implements PostService {
         return new PostResponseDto(post);
     }
     @Override
-    public void deletePost(Long id, User user) {
-        Post post = findPost(id);
-
-        // 게시글 작성자(post.user) 와 요청자(user) 가 같은지 또는 Admin 인지 체크 (아니면 예외발생)
-        if (!(user.getRole().equals(UserRoleEnum.ADMIN) || post.getUser().equals(user))) {
-            throw new RejectedExecutionException();
-        }
-
+    public void deletePost(Post post, User user) {
         postRepository.delete(post);
     }
 
@@ -66,6 +58,8 @@ public class PostServiceImpl implements PostService {
     public void likePost(Long id, User user) {
         Post post = findPost(id);
 
+        // 아래 조건 코드와 동일
+        // if (postLikeRepository.findByUserAndPost(user, post).isPresent()) {
         if (postLikeRepository.existsByUserAndPost(user, post)) {
             throw new DuplicateRequestException("이미 좋아요 한 게시글 입니다.");
         } else {
@@ -76,7 +70,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void dislikePost(Long id, User user) {
+    public void deleteLikePost(Long id, User user) {
         Post post = findPost(id);
         Optional<PostLike> postLikeOptional = postLikeRepository.findByUserAndPost(user, post);
         if (postLikeOptional.isPresent()) {

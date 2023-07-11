@@ -39,10 +39,10 @@ public interface PostService {
 
 	/**
 	 * 게시글 삭제
-	 * @param id 삭제 요청 게시글 ID
+	 * @param post 삭제 요청 게시글
 	 * @param user 게시글 삭제 요청자
 	 */
-	void deletePost(Long id, User user);
+	void deletePost(Post post, User user);
 
 	/**
 	 * 게시글 좋아요
@@ -56,7 +56,7 @@ public interface PostService {
 	 * @param id 좋아요 취소 요청 게시글 ID
 	 * @param user 게시글 좋아요 취소 요청자
 	 */
-	void dislikePost(Long id, User user);
+	void deleteLikePost(Long id, User user);
 
 	/**
 	 * 게시글 Entity 단건 조회

@@ -69,7 +69,8 @@ public class PostController {
     @DeleteMapping("/posts/{id}")
     public ResponseEntity<ApiResponseDto> deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         try {
-            postService.deletePost(id, userDetails.getUser());
+            Post post = postService.findPost(id);
+            postService.deletePost(post, userDetails.getUser());
         } catch (RejectedExecutionException e) {
             return ResponseEntity.badRequest().body(new ApiResponseDto("작성자만 삭제 할 수 있습니다.", HttpStatus.BAD_REQUEST.value()));
         }
@@ -88,9 +89,9 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponseDto("게시글 좋아요 성공", HttpStatus.ACCEPTED.value()));
     }
     @DeleteMapping("/posts/{id}/like")
-    public ResponseEntity<ApiResponseDto> dislikePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+    public ResponseEntity<ApiResponseDto> deleteLikePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         try {
-            postService.dislikePost(id, userDetails.getUser());
+            postService.deleteLikePost(id, userDetails.getUser());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }

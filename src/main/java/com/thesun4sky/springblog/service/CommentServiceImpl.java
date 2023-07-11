@@ -65,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
     }
     @Override
     @Transactional
-    public void dislikeComment(Long id, User user) {
+    public void deleteLikeComment(Long id, User user) {
         Comment comment = findComment(id);
         Optional<CommentLike> commentLikeOptional = commentLikeRepository.findByUserAndComment(user, comment);
         if (commentLikeOptional.isPresent()) {
